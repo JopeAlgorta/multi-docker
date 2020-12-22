@@ -1,0 +1,22 @@
+language: generic
+services:
+    - docker
+
+before_install:
+    - docker build -t jopealgorta/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+    - docker run -e CI=true jopealgorta/react-test npm test
+
+after_success:
+    - docker build -t jopealgorta/multi-client ./client
+    - docker build -t jopealgorta/multi-server ./server
+    - docker build -t jopealgorta/multi-nginx  ./nginx
+    - docker build -t jopealgorta/multi-worker ./worker
+    # Login to Docker Hub
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+    # Make those images and push them to Docker Hub
+    - docker push jopealgorta/multi-client
+    - docker push jopealgorta/multi-server
+    - docker push jopealgorta/multi-nginx
+    - docker push jopealgorta/multi-worker
