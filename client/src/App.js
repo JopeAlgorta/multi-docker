@@ -21,7 +21,7 @@ function App() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Learn React and Docker
+            Learn React, Docker and Travis
         </a>
           <div>
             <Route exact path='/' component={Fib} />
